@@ -1,7 +1,5 @@
 package com.picpay.user.domain.relevance;
 
-import com.picpay.user.domain.User;
-
 import javax.persistence.*;
 import java.util.UUID;
 
@@ -12,12 +10,7 @@ public class Relevance {
     @GeneratedValue
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @Enumerated(EnumType.ORDINAL)
-    private RelevanceRankType rank;
+    private Integer rank;
 
     protected Relevance() {
         //to jpa
@@ -27,12 +20,7 @@ public class Relevance {
         return id;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public RelevanceRankType getRank() {
+    public Integer getRank() {
         return rank;
     }
-    
 }

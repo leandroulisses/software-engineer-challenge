@@ -1,8 +1,9 @@
 package com.picpay.user.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.picpay.user.domain.relevance.Relevance;
+
+import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -13,9 +14,18 @@ public class User {
     private UUID id;
     private String name;
     private String username;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_ID")
+    private List<Relevance> relevance;
 
     protected User() {
         //to jpa
+    }
+
+    public User(UUID id, String name, String username) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
     }
 
     public UUID getId() {
@@ -28,6 +38,10 @@ public class User {
 
     public String getUsername() {
         return username;
+    }
+
+    public List<Relevance> getRelevance() {
+        return relevance;
     }
 
 }

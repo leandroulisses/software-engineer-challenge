@@ -1,0 +1,4 @@
+create table ROLE(
+    ID UUID NOT NULL PRIMARY KEY,
+    NAME VARCHAR(250) NOT NULL
+);

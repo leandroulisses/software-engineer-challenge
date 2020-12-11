@@ -17,7 +17,7 @@ public class CommandLineAppStartupRunner implements CommandLineRunner {
     private static final String FILE_NAME = "base.csv";
 
     @Override
-    public void run(String... args) throws Exception {
-       jobService.execute(FILE_NAME, URL_BASE);
+    public void run(String... args) {
+        jobService.execute(FILE_NAME, URL_BASE);
     }
 }

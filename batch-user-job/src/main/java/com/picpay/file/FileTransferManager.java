@@ -18,7 +18,8 @@ public class FileTransferManager {
     private static final String GZ_EXTENSION = ".gz";
 
     public Path download(DownloadFileRequest downloadFileRequest) {
-        File gzipFile = new File(downloadFileRequest.getFileName().concat(GZ_EXTENSION));
+        String gzipFileName = buildGzipFileName(downloadFileRequest);
+        File gzipFile = new File(gzipFileName);
         try {
             LOG.info("Starting download..");
             FileUtils.copyURLToFile(
@@ -27,14 +28,18 @@ public class FileTransferManager {
             LOG.info("Completed download..");
             return unGZipFile(gzipFile, downloadFileRequest.getFileName());
         } catch (IOException e) {
-            throw new RuntimeException("Error download base to import...");
+            throw new RuntimeException("Error while downloading base to import...");
         }
+    }
+
+    private String buildGzipFileName(DownloadFileRequest downloadFileRequest) {
+        return downloadFileRequest.getFileName().concat(GZ_EXTENSION);
     }
 
     public Path unGZipFile(File gzFile, String decompressedFile) throws IOException {
         File outputFile = new File(decompressedFile);
         byte[] buffer = new byte[1024];
-
+        LOG.info("Start unzip file!");
         FileInputStream fileIn = new FileInputStream(gzFile);
 
         GZIPInputStream gZIPInputStream = new GZIPInputStream(fileIn);
@@ -44,7 +49,6 @@ public class FileTransferManager {
         int bytes_read;
 
         while ((bytes_read = gZIPInputStream.read(buffer)) > 0) {
-
             fileOutputStream.write(buffer, 0, bytes_read);
         }
 

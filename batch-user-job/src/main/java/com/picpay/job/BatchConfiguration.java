@@ -1,5 +1,6 @@
 package com.picpay.job;
 
+import com.picpay.job.writer.RestItemWriter;
 import com.picpay.user.User;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -28,6 +29,9 @@ public class BatchConfiguration {
     private JobBuilderFactory jobBuilderFactory;
 
     @Autowired
+    private RestItemWriter writer;
+
+    @Autowired
     private StepBuilderFactory stepBuilderFactory;
 
     @Bean
@@ -40,19 +44,14 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public Step processBase(FlatFileItemReader<User> readBaseStep, ConsoleItemWriter<User> writer) {
+    public Step processBase(FlatFileItemReader<User> readBaseStep) {
         return stepBuilderFactory.get("processBase").<User, User>chunk(5)
                 .reader(readBaseStep)
                 .faultTolerant()
                 .skipLimit(SKIP_LIMIT)
                 .skipPolicy(new AlwaysSkipItemSkipPolicy())
-                .writer(writer())
+                .writer(writer)
                 .build();
-    }
-
-    @Bean
-    public ConsoleItemWriter<User> writer() {
-        return new ConsoleItemWriter<>();
     }
 
     @Bean

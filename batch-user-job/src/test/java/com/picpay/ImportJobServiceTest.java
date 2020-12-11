@@ -33,6 +33,5 @@ class ImportJobServiceTest {
         Path path = resourceFile.getFile().toPath();
         Mockito.when(manager.download(Mockito.any())).thenReturn(path);
         jobService.execute(FILE_NAME, URL_BASE);
-
     }
 }

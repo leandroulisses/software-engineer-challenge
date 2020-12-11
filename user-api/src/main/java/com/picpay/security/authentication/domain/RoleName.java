@@ -3,7 +3,7 @@ package com.picpay.security.authentication.domain;
 public enum RoleName {
 
     INTEGRATION(RoleNameConstants.INTEGRATION),
-    ADMIN(RoleNameConstants.ADMIN);
+    USER(RoleNameConstants.USER);
 
     private final String value;
 

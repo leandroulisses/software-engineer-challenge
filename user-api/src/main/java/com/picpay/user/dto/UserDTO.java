@@ -1,19 +1,17 @@
 package com.picpay.user.dto;
 
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
-public class CreateUserDTO {
+public class UserDTO {
 
-    @NotNull
     private UUID id;
-    @NotNull
     private String name;
-    @NotNull
     private String username;
 
-    protected CreateUserDTO() {
-        //to deserialize
+    public UserDTO(UUID id, String name, String username) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
     }
 
     public UUID getId() {
@@ -27,4 +25,5 @@ public class CreateUserDTO {
     public String getUsername() {
         return username;
     }
+
 }

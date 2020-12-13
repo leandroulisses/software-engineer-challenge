@@ -1,4 +1,4 @@
-insert into `user`
+insert into TB_USER
             (ID,
             NAME,
             USERNAME)
@@ -8,7 +8,7 @@ values      (
             'Leandro Passos',
             'leandro');
 
-insert into `user`
+insert into TB_USER
             (ID,
             NAME,
             USERNAME)
@@ -18,7 +18,7 @@ values      (
             'Leandro Ulisses',
             'xinelo');
 
-insert into `user`
+insert into TB_USER
             (ID,
             NAME,
             USERNAME)
@@ -28,7 +28,7 @@ values      (
             'Lucas Silva',
             'leandrosilva');
 
-insert into `user`
+insert into TB_USER
             (ID,
             NAME,
             USERNAME)

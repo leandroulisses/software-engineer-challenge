@@ -39,6 +39,7 @@ class UserControllerTest {
 
     @Test
     @WithMockUser
+    @Sql("/db/create-user.sql")
     void should_find_by_keyword() throws Exception {
         URI uri = new URI("/users?keyword=leandro&pageNumber=0");
         mockMvc
@@ -50,7 +51,6 @@ class UserControllerTest {
 
     @Test
     @WithMockUser(roles = {RoleNameConstants.INTEGRATION})
-    @Sql("/db/create-user.sql")
     void should_create_users() throws Exception {
         URI uri = new URI("/users");
         mockMvc

@@ -1,4 +1,4 @@
-create table auth_user (
+CREATE TABLE AUTH_USER (
 
     ID          UUID            NOT NULL,
     PASSWORD    VARCHAR(250)    NOT NULL,

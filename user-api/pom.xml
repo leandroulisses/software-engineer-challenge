@@ -30,7 +30,11 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <!--End-->
-
+        <dependency>
+            <groupId>com.picpay</groupId>
+            <artifactId>db-migrations</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!--Database related dependencies-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -41,8 +45,14 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <scope>test</scope>
         </dependency>
         <!--End-->
 
@@ -72,5 +82,15 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>user-api</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

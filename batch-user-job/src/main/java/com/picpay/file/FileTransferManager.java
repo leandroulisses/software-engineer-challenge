@@ -9,42 +9,47 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 
 @Component
 public class FileTransferManager {
     private static final Logger LOG = LoggerFactory.getLogger(FileTransferManager.class);
     private static final String GZ_EXTENSION = ".gz";
+    private static final String CSV_EXTENSION = ".csv";
 
     public Path download(DownloadFileRequest downloadFileRequest) {
-        String gzipFileName = buildGzipFileName(downloadFileRequest);
-        File gzipFile = new File(gzipFileName);
         try {
+            Path tempDir = Files.createTempDirectory(UUID.randomUUID().toString());
+            File gzipFile = Files.createTempFile(tempDir, downloadFileRequest.getFileName(), GZ_EXTENSION).toFile();
             LOG.info("Starting download..");
             FileUtils.copyURLToFile(
                     downloadFileRequest.getUrl(),
                     gzipFile);
             LOG.info("Completed download..");
-            return unGZipFile(gzipFile, downloadFileRequest.getFileName());
+            Path unGZipFile = unGZipFile(gzipFile, downloadFileRequest.getFileName());
+
+            Files.delete(gzipFile.toPath());
+            Files.delete(tempDir);
+
+            return unGZipFile;
         } catch (IOException e) {
-            throw new RuntimeException("Error while downloading base to import...");
+            throw new RuntimeException("Error while downloading base to import...", e);
         }
     }
 
-    private String buildGzipFileName(DownloadFileRequest downloadFileRequest) {
-        return downloadFileRequest.getFileName().concat(GZ_EXTENSION);
-    }
-
     public Path unGZipFile(File gzFile, String decompressedFile) throws IOException {
-        File outputFile = new File(decompressedFile);
+        Path tempDir = Files.createTempDirectory(UUID.randomUUID().toString());
+        File outputFile = Files.createTempFile(tempDir, decompressedFile, CSV_EXTENSION).toFile();
         byte[] buffer = new byte[1024];
         LOG.info("Start unzip file!");
         FileInputStream fileIn = new FileInputStream(gzFile);
 
         GZIPInputStream gZIPInputStream = new GZIPInputStream(fileIn);
 
-        FileOutputStream fileOutputStream = new FileOutputStream(decompressedFile);
+        FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
 
         int bytes_read;
 

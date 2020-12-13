@@ -41,7 +41,7 @@ public class ImportJobService {
             jobLauncher.run(job, jobParameters);
         } catch (Exception e) {
             String errorMessage = "Error on launching Job Process: ";
-            LOG.error(errorMessage, e.getMessage());
+            LOG.error(errorMessage, e);
         }
     }
 

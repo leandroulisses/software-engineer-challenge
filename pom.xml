@@ -16,6 +16,7 @@
     </properties>
 
     <modules>
+        <module>db-migrations</module>
         <module>batch-user-job</module>
         <module>user-api</module>
     </modules>
@@ -26,5 +27,6 @@
         <version>2.3.5.RELEASE</version>
         <relativePath/>
     </parent>
+
     
 </project>

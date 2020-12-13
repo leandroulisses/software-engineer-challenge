@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Table(name = "TB_USER")
 public class User {
 
     @Id

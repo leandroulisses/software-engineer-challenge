@@ -1,4 +1,4 @@
-create table AUTH_USER_ROLE(
+CREATE TABLE AUTH_USER_ROLE(
     USER_ID       UUID NOT NULL,
     ROLE_ID       UUID NOT NULL
 );

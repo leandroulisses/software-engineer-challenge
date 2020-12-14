@@ -1,28 +1,39 @@
 version: '2'
 services:
-  postgres:
-    image: "postgres"
-    env_file:
-      - database.env
-  pg_admin:
-    image: thajeztah/pgadmin4
-    container_name: pgadmin4
-    restart: always
+  mongoex:
+    image: mongo-express
+    environment:
+      - ME_CONFIG_OPTIONS_EDITORTHEME=ambiance
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
+      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=secret
     ports:
-      - "5050:5050"
+      - "8081:8081"
     links:
-      - postgres
+      - mongo
+  mongo:
+    image: "mongo:bionic"
+    container_name: mongo
+    environment:
+      - MONGO_INITDB_DATABASE=admin
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    ports:
+    - '27017-27019:27017-27019'
   user-api:
     image: user-api
     container_name: user-api
     ports:
       - "8080:8080"
     links:
-      - rabbitmq
-      - postgres
+      - mongo
   batch-user-job:
     image: batch-user-job
     container_name: batch-user-job
     links:
       - user-api
-      - postgres
+      - mongo

@@ -1,6 +1,5 @@
 package com.picpay.user;
 
-import com.picpay.security.authentication.domain.RoleNameConstants;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -9,7 +8,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -37,7 +35,6 @@ class UserControllerTest {
 
     @Test
     @WithMockUser
-    @Sql("/db/create-user.sql")
     void should_find_by_keyword() throws Exception {
         URI uri = new URI("/users?keyword=leandro&pageNumber=0");
         mockMvc
@@ -45,18 +42,6 @@ class UserControllerTest {
                         .get(uri)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect((MockMvcResultMatchers.status().is(200)));
-    }
-
-    @Test
-    @WithMockUser(roles = {RoleNameConstants.INTEGRATION})
-    void should_create_users() throws Exception {
-        URI uri = new URI("/users");
-        mockMvc
-                .perform(MockMvcRequestBuilders
-                        .post(uri)
-                        .content(asJson(validUser))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect((MockMvcResultMatchers.status().is(201)));
     }
 
 }

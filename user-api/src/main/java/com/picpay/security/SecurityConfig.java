@@ -3,6 +3,7 @@ package com.picpay.security;
 import com.picpay.security.authentication.AuthenticationService;
 import com.picpay.security.authentication.AuthenticationTokenFilter;
 import com.picpay.security.authentication.domain.AuthUserService;
+import com.picpay.security.authentication.domain.RoleService;
 import com.picpay.security.token.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthUserService authUserService;
 
+    @Autowired
+    private RoleService roleService;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(authenticationService).passwordEncoder(new PasswordEncodeDefault());
@@ -46,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().addFilterBefore(new AuthenticationTokenFilter(tokenService, authUserService),
+                .and().addFilterBefore(new AuthenticationTokenFilter(roleService, tokenService, authUserService),
                 UsernamePasswordAuthenticationFilter.class);
     }
 

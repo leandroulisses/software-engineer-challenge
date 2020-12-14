@@ -16,7 +16,6 @@
     </properties>
 
     <modules>
-        <module>db-migrations</module>
         <module>batch-user-job</module>
         <module>user-api</module>
     </modules>

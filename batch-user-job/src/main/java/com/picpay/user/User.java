@@ -1,28 +1,38 @@
 package com.picpay.user;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.TextIndexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.UUID;
 
+@Document
 public class User {
 
+    @Id
     private UUID id;
-
+    @TextIndexed
     private String name;
-
+    @TextIndexed
     private String username;
+    private Integer rank;
 
-    public User() {
+    protected User() {
+        //to jpa
     }
 
-    public void setId(UUID id) {
+    public User(UUID id, String name, String username) {
         this.id = id;
-    }
-
-    public void setName(String name) {
         this.name = name;
+        this.username = username;
+        this.rank = Integer.MAX_VALUE;
     }
 
-    public void setUsername(String username) {
+    public User(UUID id, String name, String username, Integer rank) {
+        this.id = id;
+        this.name = name;
         this.username = username;
+        this.rank = rank;
     }
 
     public UUID getId() {
@@ -37,12 +47,23 @@ public class User {
         return username;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", username='" + username + '\'' +
-                '}';
+    public Integer getRank() {
+        return rank;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
     }
 }

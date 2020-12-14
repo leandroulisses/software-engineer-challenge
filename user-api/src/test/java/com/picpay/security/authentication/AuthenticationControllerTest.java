@@ -31,7 +31,6 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    @Sql("/db/create-auth-user.sql")
     void test_authenticate_with_validUser_should_return200() throws Exception {
         LoginFormDTO loginForm = LoginFormDTO.newBuilder()
                 .withPassword("12345")

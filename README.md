@@ -4,18 +4,23 @@ Nome: Leandro Ulisses dos Passos
 
 ## BATCH USER JOB
 Responsabilidades do serviço:
-- Realiza o download do arquivo da base gzip
+- Realiza o download do arquivo da base gzip automaticamente
 - Extrai as informações do arquivo gzip para um arquivo csv
-- Inicia o processamento do arquivo csv inserindo os dados no mongodb indexando por name e username.
+- Inicia o processamento do arquivo csv inserindo os dados no postgres.
 
 ## USER API
 Responsabilidades do serviço:
-- Realizar consultas na base por qualquer texto digitado
+- Realizar consultas na base por qualquer texto em username e name
 - Api de autenticação
 
 #Iniciando o projeto
+Rodar os testes
+```
+mvn test
+```
 Para iniciar os projetos basta rodar:
 ```
+mvn clean install -DskipTests
 sh run.sh
 ```
 

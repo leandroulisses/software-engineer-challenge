@@ -25,7 +25,7 @@ import org.springframework.core.task.TaskExecutor;
 public class BatchConfiguration {
 
     private static final int SKIP_LIMIT = 10;
-    private static final int CHUNK_SIZE = 1000;
+    private static final int CHUNK_SIZE = 100;
 
     @Autowired
     private MongoItemWriter mongoItemWriter;

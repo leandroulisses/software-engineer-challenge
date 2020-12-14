@@ -5,14 +5,6 @@ services:
     container_name: postgres
     env_file:
       - database.env
-  pg_admin:
-    image: thajeztah/pgadmin4
-    container_name: pg_admin
-    restart: always
-    ports:
-      - "5050:5050"
-    links:
-      - postgres
   user-api:
     image: user-api
     container_name: user-api

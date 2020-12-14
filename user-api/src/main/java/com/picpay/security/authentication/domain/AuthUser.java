@@ -1,33 +1,27 @@
 package com.picpay.security.authentication.domain;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-@Entity
-@Table(name = "auth_user")
+@Document
 public class AuthUser implements UserDetails {
 
     @Id
-    @GeneratedValue
     private UUID id;
 
-    @Column(name = "USERNAME", unique = true)
     private String username;
 
-    @Column(name = "PASSWORD")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "AUTH_USER_ROLE",
-            joinColumns = @JoinColumn(name = "USER_ID"),
-            inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
+    @Transient
     private List<Role> roles = new ArrayList<>();
 
     protected AuthUser() {
@@ -70,6 +64,10 @@ public class AuthUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     @Override

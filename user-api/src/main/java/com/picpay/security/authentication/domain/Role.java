@@ -1,28 +1,38 @@
 package com.picpay.security.authentication.domain;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.*;
 import java.util.UUID;
 
-@Entity
+@Document
 public class Role implements GrantedAuthority {
 
     @Id
-    @GeneratedValue
-    @Column(name = "ID")
     private UUID id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "NAME")
-    private RoleName name;
+    private String name;
+
+    private UUID userId;
 
     protected Role() {
     }
-    
+
     @Override
     public String getAuthority() {
-        return name.getValue();
+        return name;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
 }

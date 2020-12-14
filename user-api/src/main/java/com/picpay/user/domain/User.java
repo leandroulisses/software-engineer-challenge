@@ -1,23 +1,21 @@
 package com.picpay.user.domain;
 
-import com.picpay.user.domain.relevance.Relevance;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.TextIndexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
-import java.util.List;
 import java.util.UUID;
 
-@Entity
-@Table(name = "TB_USER")
+@Document
 public class User {
 
     @Id
-    @GeneratedValue
     private UUID id;
+    @TextIndexed
     private String name;
+    @TextIndexed
     private String username;
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_ID")
-    private List<Relevance> relevance;
+    private Integer rank;
 
     protected User() {
         //to jpa
@@ -27,6 +25,14 @@ public class User {
         this.id = id;
         this.name = name;
         this.username = username;
+        this.rank = Integer.MAX_VALUE;
+    }
+
+    public User(UUID id, String name, String username, Integer rank) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.rank = rank;
     }
 
     public UUID getId() {
@@ -41,8 +47,8 @@ public class User {
         return username;
     }
 
-    public List<Relevance> getRelevance() {
-        return relevance;
+    public Integer getRank() {
+        return rank;
     }
 
 }

@@ -1,15 +1,14 @@
 package com.picpay.security.authentication;
 
-import com.picpay.security.token.TokenService;
 import com.picpay.security.authentication.domain.AuthUser;
 import com.picpay.security.authentication.domain.AuthUserService;
+import com.picpay.security.token.TokenService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -43,7 +42,7 @@ public class AuthenticationTokenFilter extends GenericFilterBean {
     private void authenticateClient(String token) {
         UUID userId = tokenService.getUserId(token);
         AuthUser user = authUserService.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found."));
+                .orElseThrow(() -> new RuntimeException("User not found."));
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(user, null, toRoleAuthority(user));
         SecurityContextHolder.getContext().setAuthentication(authentication);

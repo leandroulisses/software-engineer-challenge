@@ -8,9 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +27,7 @@ class UserServiceImpl implements UserService {
     @Override
     public PageImpl<UserDTO> findByKeyword(String keyword, Integer pageNumber) {
         keyword = normalize(keyword);
-        JpaSort sort = JpaSort.unsafe(Sort.Direction.ASC, "ur.rank", "name");
+        Sort sort = Sort.by(Sort.Direction.ASC, "rank", "name");
         PageRequest request = PageRequest.of(pageNumber, PAGE_SIZE, sort);
         Page<User> page = userRepository.findByKeyword(keyword, request);
         List<UserDTO> content = page.getContent().stream()

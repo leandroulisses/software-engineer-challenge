@@ -12,13 +12,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.URI;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
 class AuthenticationControllerTest {
 
     private MockMvc mockMvc;

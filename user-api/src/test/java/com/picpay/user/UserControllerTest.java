@@ -15,14 +15,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.StreamUtils;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Transactional
 class UserControllerTest {
 
     private MockMvc mockMvc;

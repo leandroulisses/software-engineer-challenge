@@ -1,6 +1,8 @@
 package com.picpay.job;
 
 import com.picpay.user.User;
+import com.picpay.user.UserRankOne;
+import com.picpay.user.UserRankTwo;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
@@ -43,11 +46,13 @@ public class BatchConfiguration {
 
 
     @Bean
-    public Job readCSVFilesJob(Step processBase) {
+    public Job readCSVFilesJob(Step processBase, Step processListOne, Step processListTwo) {
         return jobBuilderFactory
                 .get("readCsvBaseJob")
                 .incrementer(new RunIdIncrementer())
                 .start(processBase)
+                .next(processListOne)
+                .next(processListTwo)
                 .build();
     }
 
@@ -92,6 +97,78 @@ public class BatchConfiguration {
                 .fieldSetMapper(new BeanWrapperFieldSetMapper<>() {{
                     setTargetType(User.class);
                 }})
+                .build();
+    }
+
+    @Bean
+    @StepScope
+    public FlatFileItemReader<UserRankTwo> readListTwo() {
+        return new FlatFileItemReaderBuilder<UserRankTwo>()
+                .name("readListTwo")
+                .resource(new ClassPathResource("data/lista_relevancia_2.txt"))
+                .encoding("UTF-8")
+                .linesToSkip(1)
+                .delimited()
+                .delimiter(",")
+                .names("userId")
+                .fieldSetMapper(new BeanWrapperFieldSetMapper<>() {{
+                    setTargetType(UserRankTwo.class);
+                }})
+                .build();
+    }
+
+    @Bean
+    @StepScope
+    public FlatFileItemReader<UserRankOne> readListOne() {
+        return new FlatFileItemReaderBuilder<UserRankOne>()
+                .name("readListOne")
+                .resource(new ClassPathResource("data/lista_relevancia_1.txt"))
+                .encoding("UTF-8")
+                .linesToSkip(1)
+                .delimited()
+                .delimiter(",")
+                .names("userId")
+                .fieldSetMapper(new BeanWrapperFieldSetMapper<>() {{
+                    setTargetType(UserRankOne.class);
+                }})
+                .build();
+    }
+
+    @Bean
+    public Step processListOne(FlatFileItemReader<UserRankOne> readListOne, JdbcBatchItemWriter<UserRankOne> rankOneWriter) {
+        return stepBuilderFactory.get("processListOne").<UserRankOne, UserRankOne>chunk(CHUNK_SIZE)
+                .reader(readListOne)
+                .writer(rankOneWriter)
+                .taskExecutor(taskExecutor())
+                .build();
+    }
+
+    @Bean
+    public Step processListTwo(FlatFileItemReader<UserRankTwo> readListTwo, JdbcBatchItemWriter<UserRankTwo> rankTwoWriter) {
+        return stepBuilderFactory.get("processListTwo").<UserRankTwo, UserRankTwo>chunk(CHUNK_SIZE)
+                .reader(readListTwo)
+                .writer(rankTwoWriter)
+                .taskExecutor(taskExecutor())
+                .build();
+    }
+
+    @Bean
+    @StepScope
+    public JdbcBatchItemWriter<UserRankOne> rankOneWriter() {
+        return new JdbcBatchItemWriterBuilder<UserRankOne>()
+                .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                .sql("insert into RELEVANCE (ID,USER_ID,RANK) values (:id, :userId, :rank)")
+                .dataSource(dataSource)
+                .build();
+    }
+
+    @Bean
+    @StepScope
+    public JdbcBatchItemWriter<UserRankTwo> rankTwoWriter() {
+        return new JdbcBatchItemWriterBuilder<UserRankTwo>()
+                .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                .sql("insert into RELEVANCE (ID,USER_ID,RANK) values (:id, :userId, :rank)")
+                .dataSource(dataSource)
                 .build();
     }
 

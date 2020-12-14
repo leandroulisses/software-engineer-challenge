@@ -1,34 +1,42 @@
+Nome: Leandro Ulisses dos Passos
+
 ![image info](/img/solution.png)
 
-# Teste Backend
+## BATCH USER JOB
+Responsabilidades do serviço:
+- Realiza o download do arquivo da base gzip
+- Extrai as informações do arquivo gzip para um arquivo csv
+- Inicia o processamento do arquivo csv inserindo os dados no mongodb indexando por name e username.
 
-O desafio é criar uma API REST que busca usuarios pelo nome e username a partir de uma palavra chave. Faça o download do arquivo [users.csv.gz](https://s3.amazonaws.com/careers-picpay/users.csv.gz) que contém o banco de dados que deve ser usado na busca. Ele contém os IDs, nomes e usernames dos usuários.
+## USER API
+Responsabilidades do serviço:
+- Realizar consultas na base por qualquer texto digitado
+- Api de autenticação
 
-###### Exemplo
-| ID                                   | Nome              | Username             |
-|--------------------------------------|-------------------|----------------------|
-| 065d8403-8a8f-484d-b602-9138ff7dedcf | Wadson marcia     | wadson.marcia        |
-| 5761be9e-3e27-4be8-87bc-5455db08408  | Kylton Saura      | kylton.saura         |
-| ef735189-105d-4784-8e2d-c8abb07e72d3 | Edmundo Cassemiro | edmundo.cassemiro    |
-| aaa40f4e-da26-42ee-b707-cb81e00610d5 | Raimundira M      | raimundiram          |
-| 51ba0961-8d5b-47be-bcb4-54633a567a99 | Pricila Kilder    | pricilakilderitaliani|
+#Iniciando o projeto
+Para iniciar os projetos basta rodar:
+```
+sh run.sh
+```
 
 
+## Autenticando no serviço
+Para autenticar basta realizar a seguinte chamada:
+```
+curl --location --request POST 'http://localhost:8080/auth' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "username":"user",
+    "password":"12345"
+}'
+```
+O response comando acima retornará um Json nesse formato:
+```
+{"token":"eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJBUEkgVVNFUiBQSUNQQVkgU09GVFdBUkUgRU5HSU5FRVIgQ0hBTExFTkdFIiwic3ViIjoiZWM1ZjY2YWEtNDZlNC00ZjExLTk3NTEtZjJlMmJmMjg1ZjJjIiwiaWF0IjoxNjA3OTU1Nzk5LCJleHAiOjE2MDgwNDIxOTksInJvbGVzIjpbIlVTRVIiXX0.hEoR0m3Vm1JpuuBJgkWuQ2eCAJ9fi48P_X3XhCcZA-_jYZtxtJXe7da1Pj4lH56eN75EJTGxE5wwq-dEPiX-ZQ","type":"Bearer"}
+```
 
-Também são fornecidas duas listas de usuários que devem ser utilizadas para priorizar os resultados da busca. A lista 1 tem mais prioridade que a lista 2. Ou seja, se dois usuarios casam com os criterios de busca, aquele que está na lista 1 deverá ser exibido primeiro em relação àquele que está na lista 2. Os que não estão em nenhuma das listas são exibidos em seguida.
-
-As listas podem ser encontradas na raiz deste repositório ([lista_relevancia_1.txt](lista_relevancia_1.txt) e [lista_relevancia_2.txt](lista_relevancia_2.txt)).
-Os resultados devem ser retornados paginados de 15 em 15 registros.
-
-Utilize ***Docker*** e escolha as tecnologias que você vai usar e tente montar uma solução completa para rodar a aplicação.
-
-Faça um ***Fork*** deste repositório e abra um ***Pull Request***, **com seu nome na descrição**, para participar. 
-
------
-
-### Diferenciais
-
-- Criar uma solução de autenticação entre o frontend e o backend;
-- Ter um desempenho elevado num conjunto de dados muito grande;
-- Criar testes automatizados;
-- Seja Cloud native;
+## Pesquisando usuários por uma keyword
+```
+curl --location --request GET 'http://localhost:8080/users?keyword=leandro&pageNumber=0' \
+--header 'Authorization: Bearer TOKEN_GERADO_NA_REQUEST_ANTERIOR' 
+```

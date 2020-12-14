@@ -14,7 +14,7 @@ Responsabilidades do serviço:
 - Api de autenticação
 
 #Iniciando o projeto
-Rodar os testes
+Rodar os testes:
 ```
 mvn test
 ```

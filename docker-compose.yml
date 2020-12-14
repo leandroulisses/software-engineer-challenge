@@ -2,40 +2,31 @@ version: '2'
 services:
   postgres:
     image: "postgres"
+    container_name: postgres
     env_file:
       - database.env
   pg_admin:
     image: thajeztah/pgadmin4
-    container_name: pgadmin4
+    container_name: pg_admin
     restart: always
     ports:
       - "5050:5050"
     links:
       - postgres
-  rabbitmq:
-    image: "rabbitmq:3-management"
-    hostname: "rabbitmq"
-    environment:
-      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
-      RABBITMQ_DEFAULT_USER: "rabbitmq"
-      RABBITMQ_DEFAULT_PASS: "rabbitmq"
-      RABBITMQ_DEFAULT_VHOST: "/"
-    ports:
-      - "15672:15672"
-      - "5672:5672"
-    labels:
-      NAME: "rabbitmq"
   user-api:
     image: user-api
     container_name: user-api
     ports:
       - "8080:8080"
     links:
-      - rabbitmq
+      - postgres
+    depends_on:
       - postgres
   batch-user-job:
     image: batch-user-job
     container_name: batch-user-job
     links:
       - user-api
+      - postgres
+    depends_on:
       - postgres

@@ -1,11 +1,9 @@
 package com.picpay.user;
 
-import com.picpay.security.authentication.domain.RoleNameConstants;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -26,7 +24,6 @@ import java.nio.charset.Charset;
 class UserControllerTest {
 
     private MockMvc mockMvc;
-    private final Resource validUser = new ClassPathResource("json/validUsers.json");
 
     @Autowired
     public UserControllerTest(MockMvc mockMvc) {
@@ -47,18 +44,6 @@ class UserControllerTest {
                         .get(uri)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect((MockMvcResultMatchers.status().is(200)));
-    }
-
-    @Test
-    @WithMockUser(roles = {RoleNameConstants.INTEGRATION})
-    void should_create_users() throws Exception {
-        URI uri = new URI("/users");
-        mockMvc
-                .perform(MockMvcRequestBuilders
-                        .post(uri)
-                        .content(asJson(validUser))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect((MockMvcResultMatchers.status().is(201)));
     }
 
 }

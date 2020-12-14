@@ -1,3 +1,6 @@
+docker stop postgres
+docker rm postgres
+docker rmi postgres
 cd $(pwd)/batch-user-job
 bash build.sh
 cd ..

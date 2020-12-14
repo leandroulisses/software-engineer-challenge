@@ -16,6 +16,7 @@ Responsabilidades do serviço:
 #Iniciando o projeto
 Para iniciar os projetos basta rodar:
 ```
+mvn clean install
 sh run.sh
 ```
 

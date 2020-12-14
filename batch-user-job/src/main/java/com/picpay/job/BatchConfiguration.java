@@ -1,6 +1,5 @@
 package com.picpay.job;
 
-import com.picpay.user.User;
 import com.picpay.user.UserSummary;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -18,6 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 
 @EnableBatchProcessing
 @Configuration
@@ -53,7 +54,14 @@ public class BatchConfiguration {
                 .skipLimit(SKIP_LIMIT)
                 .skipPolicy(new AlwaysSkipItemSkipPolicy())
                 .writer(mongoItemWriter)
+                .taskExecutor(taskExecutor())
                 .build();
+    }
+
+    private TaskExecutor taskExecutor() {
+        SimpleAsyncTaskExecutor asyncTaskExecutor = new SimpleAsyncTaskExecutor("processBaseStep");
+        asyncTaskExecutor.setConcurrencyLimit(10);
+        return asyncTaskExecutor;
     }
 
     @Bean

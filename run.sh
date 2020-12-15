@@ -1,6 +1,6 @@
-docker stop postgres
-docker rm postgres
-docker rmi postgres
+docker stop mongo
+docker rm mongo
+docker rmi mongo
 cd $(pwd)/batch-user-job
 bash build.sh
 cd ..
